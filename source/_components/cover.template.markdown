@@ -1,29 +1,25 @@
 ---
-layout: page
 title: "Template Cover"
 description: "Instructions on how to integrate Template Covers into Home Assistant."
-date: 2017-06-19 20:32
-sidebar: true
-comments: false
-sharing: true
-footer: true
-ha_category: Cover
+ha_category:
+  - Cover
 ha_release: 0.48
-ha_iot_class: "Local Push"
+ha_iot_class: Local Push
 logo: home-assistant.png
 ha_qa_scale: internal
 ---
 
-The `template` platform can create covers that combine components and provides
+The `template` platform can create covers that combine integrations and provides
 the ability to run scripts or invoke services for each of the open,
 close, stop, position and tilt commands of a cover.
 
-## {% linkable_title Configuration %}
+## Configuration
 
 To enable Template Covers in your installation,
 add the following to your `configuration.yaml` file:
 
 {% raw %}
+
 ```yaml
 # Example configuration.yaml entry
 cover:
@@ -39,6 +35,7 @@ cover:
         stop_cover:
           service: script.stop_garage_door
 ```
+
 {% endraw %}
 
 {% configuration %}
@@ -67,6 +64,15 @@ cover:
         description: Defines a template to specify which icon to use.
         required: false
         type: template
+      availability_template:
+        description: Defines a template to get the `available` state of the component. If the template returns `true`, the device is `available`. If the template returns any other value, the device will be `unavailable`. If `availability_template` is not configured, the component will always be `available`.
+        required: false
+        type: template
+        default: true
+      device_class:
+        description: Sets the [class of the device](/components/cover/), changing the device state and icon that is displayed on the frontend.
+        required: false
+        type: string
       open_cover:
         description: Defines an action to run when the cover is opened. If [`open_cover`](#open_cover) is specified, [`close_cover`](#close_cover) must also be specified. At least one of [`open_cover`](#open_cover) and [`set_cover_position`](#set_cover_position) must be specified.
         required: inclusive
@@ -103,19 +109,19 @@ cover:
         type: template
 {% endconfiguration %}
 
-## {% linkable_title Considerations %}
+## Considerations
 
 If you are using the state of a platform that takes extra time to load, the
 Template Cover may get an `unknown` state during startup. This results in error
 messages in your log file until that platform has completed loading.
 If you use `is_state()` function in your template, you can avoid this situation.
 For example, you would replace
-{% raw %}`{{ states.switch.source.state == 'on' }}`{% endraw %}
+{% raw %}`{{ states.cover.source.state == 'open' }}`{% endraw %}
 with this equivalent that returns `true`/`false` and never gives an unknown
 result:
-{% raw %}`{{ is_state('switch.source', 'on') }}`{% endraw %}
+{% raw %}`{{ is_state('cover.source', 'open') }}`{% endraw %}
 
-## {% linkable_title Optimistic Mode %}
+## Optimistic Mode
 
 In optimistic mode, the cover position state is maintained internally. This mode
 is automatically enabled if neither [`value_template`](#value_template) or
@@ -127,16 +133,17 @@ There is an equivalent mode for `tilt_position` that is enabled when
 [`tilt_template`](#tilt_template) is not specified or when the
 [`tilt_optimistic`](#tilt_optimistic) attribute is used.
 
-## {% linkable_title Examples %}
+## Examples
 
 In this section you will find some real-life examples of how to use this cover.
 
-### {% linkable_title Garage Door %}
+### Garage Door
 
 This example converts a garage door with a controllable switch and position
 sensor into a cover.
 
 {% raw %}
+
 ```yaml
 cover:
   - platform: template
@@ -163,13 +170,15 @@ cover:
             mdi:garage
           {% endif %}
 ```
+
 {% endraw %}
 
-### {% linkable_title Multiple Covers %}
+### Multiple Covers
 
 This example allows you to control two or more covers at once.
 
 {% raw %}
+
 ```yaml
 homeassistant:
   customize:
@@ -250,13 +259,15 @@ automation:
           entity_id: cover.cover_group
           position: 25
 ```
+
 {% endraw %}
 
-### {% linkable_title Change The Icon %}
+### Change The Icon
 
 This example shows how to change the icon based on the cover state.
 
 {% raw %}
+
 ```yaml
 cover:
   - platform: template
@@ -283,13 +294,15 @@ cover:
             mdi:window-closed
           {% endif %}
 ```
+
 {% endraw %}
 
-### {% linkable_title Change The Entity Picture %}
+### Change The Entity Picture
 
 This example shows how to change the entity picture based on the cover state.
 
 {% raw %}
+
 ```yaml
 cover:
   - platform: template
@@ -316,4 +329,5 @@ cover:
             /local/cover-closed.png
           {% endif %}
 ```
+
 {% endraw %}

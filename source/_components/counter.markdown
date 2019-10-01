@@ -1,19 +1,16 @@
 ---
-layout: page
 title: "Counter"
 description: "Instructions on how to integrate counters into Home Assistant."
-date: 2017-08-26 06:00
-sidebar: true
-comments: false
-sharing: true
-footer: true
 logo: home-assistant.png
-ha_category: Automation
+ha_category:
+  - Automation
 ha_release: 0.53
 ha_qa_scale: internal
 ---
 
-The `counter` component allows one to count occurrences fired by automations.
+The `counter` integration allows one to count occurrences fired by automations.
+
+## Configuration
 
 To add a counter to your installation, add the following to your `configuration.yaml` file:
 
@@ -26,9 +23,8 @@ counter:
 ```
 
 {% configuration %}
-# 'alias' should be replaced by the user for their actual value.
 "[alias]":
-  description: Alias for the counter. Multiple entries are allowed.
+  description: Alias for the counter. Multiple entries are allowed. `alias` should be replaced by the user for their actual value.
   required: true
   type: map
   keys:
@@ -51,6 +47,14 @@ counter:
       required: false
       type: integer
       default: 1
+    minimum:
+      description: Minimum value the counter will have
+      required: false
+      type: integer
+    maximum:
+      description: Maximum value the counter will have
+      required: false
+      type: integer
     icon:
       description: Icon to display for the counter.
       required: false
@@ -59,17 +63,17 @@ counter:
 
 Pick an icon that you can find on [materialdesignicons.com](https://materialdesignicons.com/) to use for your input and prefix the name with `mdi:`. For example `mdi:car`, `mdi:ambulance` or `mdi:motorbike`.
 
-### {% linkable_title Restore State %}
+### Restore State
 
-This component will automatically restore the state it had prior to Home Assistant stopping as long as you your entity has `restore` set to `true` which is the default. To disable this feature, set `restore` to `false`.
+This integration will automatically restore the state it had prior to Home Assistant stopping as long as you your entity has `restore` set to `true` which is the default. To disable this feature, set `restore` to `false`.
 
 If `restore` is set to `false`, the `initial` value will only be used when no previous state is found or when the counter is reset.
 
-## {% linkable_title Services %}
+## Services
 
 Available services: `increment`, `decrement`, and `reset`.
 
-#### {% linkable_title Service `counter.increment` %}
+#### Service `counter.increment`
 
 Increments the counter with 1 or the given value for the steps.
 
@@ -77,7 +81,7 @@ Increments the counter with 1 or the given value for the steps.
 | ---------------------- | -------- | ----------- |
 | `entity_id`            |      no  | Name of the entity to take action, e.g., `counter.my_custom_counter`. |
 
-#### {% linkable_title Service `counter.decrement` %}
+#### Service `counter.decrement`
 
 Decrements the counter with 1 or the given value for the steps.
 
@@ -85,7 +89,7 @@ Decrements the counter with 1 or the given value for the steps.
 | ---------------------- | -------- | ----------- |
 | `entity_id`            |      no  | Name of the entity to take action, e.g., `counter.my_custom_counter`. |
 
-#### {% linkable_title Service `counter.reset` %}
+#### Service `counter.reset`
 
 With this service the counter is reset to its initial value.
 
@@ -93,8 +97,20 @@ With this service the counter is reset to its initial value.
 | ---------------------- | -------- | ----------- |
 | `entity_id`            |      no  | Name of the entity to take action, e.g., `counter.my_custom_counter`. |
 
+#### Service `counter.configure`
 
-### {% linkable_title Use the service %}
+With this service the properties of the counter can be changed while running.
+
+| Service data attribute | Optional | Description |
+| ---------------------- | -------- | ----------- |
+| `entity_id`            |      no  | Name of the entity to take action, e.g., `counter.my_custom_counter`. |
+| `minimum`              |     yes  | Set new value for minimum. None disables minimum. |
+| `maximum`              |     yes  | Set new value for maximum. None disables maximum. |
+| `step`                 |     yes  | Set new value for step |
+
+
+
+### Use the service
 
 Select <img src='/images/screenshots/developer-tool-services-icon.png' alt='service developer tool icon' class="no-shadow" height="38" /> **Services** from the **Developer Tools**. Choose **counter** from the list of **Domains**, select the **Service**, enter something like the sample below into the **Service Data** field, and hit **CALL SERVICE**.
 
@@ -104,3 +120,36 @@ Select <img src='/images/screenshots/developer-tool-services-icon.png' alt='serv
 }
 ```
 
+## Examples
+
+### Counting Home Assistant errors
+
+To use a counter to count errors as caught by Home Assistant, you need to add `fire_event: true` to your `configuration.yaml`, like so:
+
+```yaml
+# Example configuration.yaml entry
+system_log:
+  fire_event: true
+```
+
+### Error counting - example configuration
+
+```yaml
+# Example configuration.yaml entry
+automation:
+- id: 'errorcounterautomation'
+  alias: Error Counting Automation
+  trigger:
+    platform: event
+    event_type: system_log_event
+    event_data:
+      level: ERROR
+  action:
+    service: counter.increment
+    entity_id: counter.error_counter
+    
+counter:
+  error_counter:
+    name: Errors
+    icon: mdi:alert  
+```

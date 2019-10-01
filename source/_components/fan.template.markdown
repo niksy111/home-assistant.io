@@ -1,20 +1,15 @@
 ---
-layout: page
 title: "Template Fan"
 description: "Instructions how to setup the Template fans within Home Assistant."
-date: 2018-05-03 09:00
-sidebar: true
-comments: false
-sharing: true
-footer: true
-ha_category: Fan
+ha_category:
+  - Fan
 ha_release: 0.69
-ha_iot_class: "Local Push"
+ha_iot_class: Local Push
 logo: home-assistant.png
 ha_qa_scale: internal
 ---
 
-The `template` platform creates fans that combine components and provides the
+The `template` platform creates fans that combine integrations and provides the
 ability to run scripts or invoke services for each of the turn_on, turn_off, set_speed,
 set_oscillating, and set_direction commands of a fan.
 
@@ -22,6 +17,7 @@ To enable Template Fans in your installation, add the following to your
 `configuration.yaml` file:
 
 {% raw %}
+
 ```yaml
 # Example configuration.yaml entry
 fan:
@@ -54,6 +50,7 @@ fan:
           - '2'
           - '3'
 ```
+
 {% endraw %}
 
 {% configuration %}
@@ -82,6 +79,11 @@ fan:
         description: "Defines a template to get the direction of the fan. Valid value: 'forward'/'reverse'"
         required: false
         type: template
+      availability_template:
+        description: Defines a template to get the `available` state of the component. If the template returns `true`, the device is `available`. If the template returns any other value, the device will be `unavailable`. If `availability_template` is not configured, the component will always be `available`.
+        required: false
+        type: template
+        default: true
       turn_on:
         description: Defines an action to run when the fan is turned on.
         required: true
@@ -105,6 +107,6 @@ fan:
       speeds:
         description: List of speeds the fan is capable of running at.
         required: false
-        type: string list
+        type: [string, list]
         default: ['low', 'medium', 'high']
 {% endconfiguration %}

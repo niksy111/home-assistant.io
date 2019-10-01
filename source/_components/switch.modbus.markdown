@@ -1,21 +1,16 @@
 ---
-layout: page
 title: "Modbus Switch"
 description: "Instructions on how to integrate Modbus switches into Home Assistant."
-date: 2015-08-30 23:38
-sidebar: true
-comments: false
-sharing: true
-footer: true
 logo: modbus.png
-ha_category: Switch
+ha_category:
+  - Switch
 ha_release: pre 0.7
-ha_iot_class: "Local Push"
+ha_iot_class: Local Push
 ---
 
 The `modbus` switch platform allows you to control [Modbus](http://www.modbus.org/) coils or registers.
 
-## {% linkable_title Configuration %}
+## Configuration
 
 To use your Modbus switches in your installation, add the following to your `configuration.yaml` file:
 
@@ -23,9 +18,9 @@ To use your Modbus switches in your installation, add the following to your `con
 # Example configuration.yaml entry
 switch:
   platform: modbus
-  slave: 1
   coils:
     - name: Switch1
+      hub: hub1
       slave: 1
       coil: 13
     - name: Switch2
@@ -33,6 +28,7 @@ switch:
       coil: 14
   registers:
     - name: Register1
+      hub: hub1
       slave: 1
       register: 11
       command_on: 1
@@ -45,6 +41,11 @@ coils:
   required: false
   type: map
   keys:
+    hub:
+      description: The name of the hub.
+      required: false
+      default: default
+      type: string
     slave:
       description: The number of the slave (can be omitted for tcp and udp Modbus).
       required: true
@@ -62,6 +63,11 @@ register:
   required: false
   type: map
   keys:
+    hub_name:
+      description: The hub to use.
+      required: false
+      default: default
+      type: string
     slave:
       description: The number of the slave (can be omitted for tcp and udp Modbus).
       required: true
@@ -108,3 +114,24 @@ register:
       default: same as command_off
       type: integer
 {% endconfiguration %}
+
+It's possible to change the default 30 seconds scan interval for the switch state updates as shown in the [Platform options](/docs/configuration/platform_options/#scan-interval) documentation.
+
+### Full example
+
+Example a temperature sensor with a 10 seconds scan interval:
+
+```yaml
+switch:
+  platform: modbus
+  scan_interval: 10
+  coils:
+    - name: Switch1
+      hub: hub1
+      slave: 1
+      coil: 13
+    - name: Switch2
+      hub: hub1
+      slave: 2
+      coil: 14
+```

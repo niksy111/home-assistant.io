@@ -1,41 +1,56 @@
 ---
-layout: page
 title: "OpenUV"
 description: "Instructions on how to integrate OpenUV within Home Assistant."
-date: 2018-07-31 22:01
-sidebar: true
-comments: false
-sharing: true
-footer: true
 logo: openuv.jpg
 ha_category:
   - Health
   - Binary Sensor
   - Sensor
 ha_release: 0.76
-ha_iot_class: "Cloud Polling"
+ha_iot_class: Cloud Polling
 ha_config_flow: true
 redirect_from:
   - /components/binary_sensor.openuv/
   - /components/sensor.openuv/
 ---
 
-The `openuv` component displays UV and Ozone data from [openuv.io](http://openuv.io).
+The `openuv` integration displays UV and Ozone data from [openuv.io](http://openuv.io).
 
-## {% linkable_title Generating an API Key %}
+## Generating an API Key
 
 To generate an API key,
 [simply log in to the OpenUV website](https://www.openuv.io/auth/google).
 
-<p class='note warning'>
+<div class='note warning'>
+
 Beginning February 1, 2019, the "Limited" plan (which is what new users are
 given by default) is limited to 50 API requests per day. Because different
 API plans and locations will have different requirements, the `openuv`
 component does not automatically query the API for new data after it initially
 loads. To request new data, the `update_data` service may be used.
-</p>
 
-## {% linkable_title Configuration %}
+</div>
+
+<div class='note warning'>
+
+Each use of the `update_data` service will consume 1 or 2 API calls, depending
+on which monitored conditions are configured.
+
+If the OpenUV integration is configured through the Home Assistant UI (via the
+`Configuration >> Integrations` panel), each service call will consume 2 API
+calls from the daily quota.
+
+If the OpenUV integration is configured via `configuration.yaml`, service calls
+will consume 2 API calls if `monitored_conditions` contains both
+`uv_protection_window` and any other condition; any other scenarios will only
+consume 1 API call.
+
+Ensure that you understand these specifications when calling the `update_data`
+service.
+
+</div>
+
+## Configuration
 
 To retrieve data from OpenUV, add the following to your `configuration.yaml`
 file:
@@ -100,7 +115,7 @@ The approximate number of minutes of a particular skin type can be exposed to
 the sun before burning/tanning starts is based on the
 [Fitzpatrick scale](https://en.wikipedia.org/wiki/Fitzpatrick_scale).
 
-## {% linkable_title Full Configuration Example %}
+## Full Configuration Example
 
 To configure additional functionality, add configuration options beneath a
 `binary_sensor` and/or `sensor` key within the `openuv` section of the
@@ -126,19 +141,27 @@ openuv:
       - safe_exposure_time_type_6
 ```
 
-<p class='note warning'>
+<div class='note warning'>
 The above guidelines constitute estimates and are intended to help informed
 decision making. They should not replace analysis, advice or diagnosis from a
 trained medical professional.
-</p>
+</div>
 
-## {% linkable_title Services %}
+## Services
 
-### {% linkable_title `openuv.update_data` %}
+### `openuv.update_data`
 
 Perform an on-demand update of OpenUV data.
 
-## {% linkable_title Examples of Updating Data %}
+### `openuv.update_uv_index_data`
+
+Perform an on-demand update of OpenUV sensor data including current UV index, but not the `uv_protection_window`, saving an API call over `update_data`.
+
+### `openuv.update_protection_data`
+
+Perform an on-demand update of OpenUV `uv_protection_window` data, but not the sensors, saving an API call.
+
+## Examples of Updating Data
 
 One method to retrieve data every 30 minutes and still leave plenty of API key
 usage is to only retrieve data during the daytime:
@@ -158,6 +181,34 @@ automation:
           before: sunset
     action:
       service: openuv.update_data
+```
+
+Update only the sensors every 20 minutes while the sun is at least 10 degrees above the horizon:
+
+```yaml
+automation:
+  - alias: Update OpenUV every 20 minutes while the sun is at least 10 degrees above the horizon
+    trigger:
+      platform: time_pattern
+      minutes: '/20'
+    condition:
+      condition: numeric_state
+      entity_id: sun.sun
+      value_template: '{{ state.attributes.elevation }}'
+      above: 10
+    action:
+      service: openuv.update_uv_index_data
+```
+
+Update the protection window once a day:
+```yaml
+automation:
+  - alias: Update OpenUV protection window once a day
+    trigger:
+      platform: time
+      at: "02:12:00"
+    action:
+      service: openuv.update_protection_data
 ```
 
 Another method (useful when monitoring locations other than the HASS latitude
