@@ -1,13 +1,7 @@
 ---
-layout: page
 title: "Entity Button Card"
 sidebar_label: Entity Button
 description: "The Entity Button card allows you to add buttons to perform tasks"
-date: 2018-10-11 10:28 +00:00
-sidebar: true
-comments: false
-sharing: true
-footer: true
 ---
 
 The Entity Button card allows you to add buttons to perform tasks.
@@ -18,12 +12,8 @@ Screenshot of the Entity Button card.
 </p>
 
 ```yaml
-- type: entity-button
-  entity: light.living_room
-- type: entity-button
-  entity: light.office
-- type: entity-button
-  entity: light.bedroom
+type: entity-button
+entity: light.living_room
 ```
 
 {% configuration %}
@@ -45,19 +35,39 @@ icon:
   description: Overwrites icon or entity picture.
   type: string
   default: Entity Domain Icon
+show_name:
+  required: false
+  description: Show name.
+  type: boolean
+  default: "true"
+show_icon:
+  required: false
+  description: Show icon.
+  type: boolean
+  default: "true"
+icon_height:
+  required: false
+  description: Set the height for the icon. This is in pixels which is handled by the config ui. (Advanced users can use other CSS values if they like)
+  type: string
+  default: auto
 tap_action:
   required: false
   description: Action to take on tap
-  type: object
+  type: map
   keys:
     action:
       required: true
-      description: "Action to perform (`more-info`, `toggle`, `call-service`, `navigate`, `none`)"
+      description: "Action to perform (`more-info`, `toggle`, `call-service`, `navigate`, `url`, `none`)"
       type: string
-      default: "`more-info`"
+      default: "`toggle`"
     navigation_path:
       required: false
       description: "Path to navigate to (e.g. `/lovelace/0/`) when `action` defined as `navigate`"
+      type: string
+      default: none
+    url_path:
+      required: false
+      description: "Path to navigate to (e.g. `https://www.home-assistant.io`) when `action` defined as `url`"
       type: string
       default: none
     service:
@@ -73,16 +83,21 @@ tap_action:
 hold_action:
   required: false
   description: Action to take on tap-and-hold
-  type: object
+  type: map
   keys:
     action:
       required: true
-      description: "Action to perform (`more-info`, `toggle`, `call-service`, `navigate`, `none`)"
+      description: "Action to perform (`more-info`, `toggle`, `call-service`, `navigate`, `url`, `none`)"
       type: string
       default: "`more-info`"
     navigation_path:
       required: false
       description: "Path to navigate to (e.g. `/lovelace/0/`) when `action` defined as `navigate`"
+      type: string
+      default: none
+    url_path:
+      required: false
+      description: "Path to navigate to (e.g. `https://www.home-assistant.io`) when `action` defined as `url`"
       type: string
       default: none
     service:
@@ -101,19 +116,19 @@ theme:
   type: string
 {% endconfiguration %}
 
-## {% linkable_title Examples %}
+## Examples
 
 Title and Script Service Example:
 
 ```yaml
-- type: entity-button
-  name: Turn Off Lights
-  tap_action:
-    action: call-service
-    service: script.turn_on
-    service_data:
-      entity_id: script.turn_off_lights
-  entity: script.turn_off_lights
+type: entity-button
+name: Turn Off Lights
+tap_action:
+  action: call-service
+  service: script.turn_on
+  service_data:
+    entity_id: script.turn_off_lights
+entity: script.turn_off_lights
 ```
 
 <p class='img'>
