@@ -1,10 +1,13 @@
 ---
-title: "Amazon Polly"
-description: "Instructions on how to setup Amazon Polly with Home Assistant."
-logo: polly.png
+title: Amazon Polly
+description: Instructions on how to setup Amazon Polly with Home Assistant.
 ha_category:
   - Text-to-speech
 ha_release: 0.37
+ha_domain: amazon_polly
+ha_iot_class: Cloud Push
+ha_platforms:
+  - tts
 ---
 
 The `amazon_polly` text-to-speech platform that works with [Amazon Polly](https://aws.amazon.com/polly/) to create the spoken output.
@@ -12,9 +15,9 @@ Polly is a paid service via Amazon Web Services.  There is a [free tier](https:/
 
 ## Setup
 
-For more information, please read the [AWS General Reference regarding Security Credentials](http://docs.aws.amazon.com/general/latest/gr/aws-security-credentials.html) to get the needed details. Also, check the [boto3 Documentation](http://boto3.readthedocs.io/en/latest/guide/configuration.html#shared-credentials-file) about the profiles and the [AWS Regions and Endpoints Reference](https://docs.aws.amazon.com/general/latest/gr/rande.html#pol_region) for available regions.
+For more information, please read the [AWS General Reference regarding Security Credentials](https://docs.aws.amazon.com/general/latest/gr/aws-security-credentials.html) to get the needed details. Also, check the [boto3 Documentation](https://boto3.readthedocs.io/en/latest/guide/configuration.html#shared-credentials-file) about the profiles and the [AWS Regions and Endpoints Reference](https://docs.aws.amazon.com/general/latest/gr/rande.html#pol_region) for available regions.
 
-Available voices are listed in the [Amazon Documentation](http://docs.aws.amazon.com/polly/latest/dg/voicelist.html).
+Available voices are listed in the [Amazon Documentation](https://docs.aws.amazon.com/polly/latest/dg/voicelist.html).
 
 ## Configuration
 
@@ -46,10 +49,6 @@ region_name:
   required: false
   type: [string, list]
   default: us-east-1
-name:
-  description: "Setting the optional parameter `name` allows multiple notifiers to be created. The default value is `notify`. The notifier will bind to the service `notify.NOTIFIER_NAME`."
-  required: false
-  type: string
 text_type:
   description: "Specify wherever to use text (default) or ssml markup by default."
   required: false
@@ -82,15 +81,15 @@ Say to all `media_player` device entities:
 
 ```yaml
 - service: tts.amazon_polly_say
-  data_template:
-    message: '<speak>Hello from Amazon Polly</speak>'
+  data:
+    message: "<speak>Hello from Amazon Polly</speak>"
 ```
 
 or
 
 ```yaml
 - service: tts.amazon_polly_say
-  data_template:
+  data:
     message: >
       <speak>
           Hello from Amazon Polly
@@ -101,7 +100,7 @@ Say to the `media_player.living_room` device entity:
 
 ```yaml
 - service: tts.amazon_polly_say
-  data_template:
+  target:
     entity_id: media_player.living_room
     message: >
       <speak>
@@ -113,7 +112,7 @@ Say with break:
 
 ```yaml
 - service: tts.amazon_polly_say
-  data_template:
+  data:
     message: >
       <speak>
           Hello from

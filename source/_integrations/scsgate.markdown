@@ -1,7 +1,6 @@
 ---
-title: "SCSGate"
-description: "Instructions on how to integrate SCSGate into Home Assistant."
-logo: bus_scs.png
+title: SCSGate
+description: Instructions on how to integrate SCSGate into Home Assistant.
 ha_category:
   - Hub
   - Cover
@@ -9,6 +8,11 @@ ha_category:
   - Switch
 ha_release: 0.13
 ha_iot_class: Local Polling
+ha_domain: scsgate
+ha_platforms:
+  - cover
+  - light
+  - switch
 ---
 
 The SCSGate integration support the [SCSGate](https://translate.google.com/translate?hl=en&sl=it&tl=en&u=http%3A%2F%2Fguidopic.altervista.org%2Feibscsgt%2Finterface.html) device. This a home-brew device allows to interact with the MyHome system from BTicino/Legrande.
@@ -40,7 +44,7 @@ The SCSGate integration relies on the [scsgate](https://github.com/flavio/scsgat
 
 This module provides also a command line tool called `scs-monitor`. This program can be used to find the IDs of your lights, switches and roller shutters and produce the YAML snippet to insert into your `configuration.yaml` file.
 
-For more information checkout [this](http://scsgate.readthedocs.org/en/latest/?badge=latest#creation-of-a-home-assistant-configuration-file) section of `scsgate`'s documentation.
+For more information checkout [this](https://scsgate.readthedocs.org/en/latest/?badge=latest#creation-of-a-home-assistant-configuration-file) section of `scsgate`'s documentation.
 
 ### Cover
 

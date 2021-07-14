@@ -1,11 +1,13 @@
 ---
-title: "Keyboard Remote"
-description: "Instructions on how to use a keyboard to remote control Home Assistant."
-logo: keyboard.png
+title: Keyboard Remote
+description: Instructions on how to use a keyboard to remote control Home Assistant.
 ha_category:
   - Other
 ha_release: 0.29
 ha_iot_class: Local Push
+ha_codeowners:
+  - '@bendavid'
+ha_domain: keyboard_remote
 ---
 
 Receive signals from a keyboard and use it as a remote control.
@@ -17,15 +19,30 @@ The `evdev` package is used to interface with the keyboard and thus this is Linu
 ```yaml
 # Example configuration.yaml entry
 keyboard_remote:
-  type: 'key_up'
+  type: "key_up"
 ```
 
 {% configuration %}
 type:
-  description: Possible values are `key_up`, `key_down`, and `key_hold`. Be careful, `key_hold` will fire a lot of events.
+  description: Possible values are `key_up`, `key_down`, and `key_hold`. Be careful, `key_hold` will fire a lot of events.  This can be a list of types.
   required: true
   type: string
-device_description:
+emulate_key_hold:
+  description: Emulate key hold events when key is held down.  (Some input devices do not send these otherwise.)
+  required: false
+  type: boolean
+  default: false
+emulate_key_hold_delay:
+  description:  Number of milliseconds to wait before sending first emulated key hold event
+  required: false
+  type: float
+  default: 0.250
+emulate_key_hold_repeat:
+  description:  Number of milliseconds to wait before sending subsequent emulated key hold event
+  required: false
+  type: float
+  default: 0.033
+device_descriptor:
   description: Path to the local event input device file that corresponds to the keyboard.
   required: false
   type: string
@@ -35,7 +52,7 @@ device_name:
   type: string
 {% endconfiguration %}
 
-Either `device_name` or `device_descriptor` must be present in the configuration entry. Indicating a device name is useful in case of repeating disconnections and re-connections of the device (for example, a bluetooth keyboard): the local input device file might change, thus breaking the configuration, while the name remains the same.
+Either `device_name` or `device_descriptor` must be present in the configuration entry. Indicating a device name is useful in case of repeating disconnections and re-connections of the device (for example, a Bluetooth keyboard): the local input device file might change, thus breaking the configuration, while the name remains the same.
 In case of presence of multiple devices of the same model, `device_descriptor` must be used.
 
 A list of possible device descriptors and names is reported in the debug log at startup when the device indicated in the configuration entry could not be found.
@@ -45,24 +62,29 @@ A full configuration for two Keyboard Remotes could look like the one below:
 ```yaml
 keyboard_remote:
 - device_descriptor: '/dev/input/by-id/bluetooth-keyboard'
-  type: 'key_up'
+  type: "key_down"
+  emulate_key_hold: true
+  emulate_key_hold_delay: 0.25
+  emulate_key_hold_repeat: 0.033
 - device_descriptor: '/dev/input/event0'
-  type: 'key_up'
+  type:
+    - 'key_up'
+    - 'key_down'
 ```
 
 Or like the following for one keyboard:
 
 ```yaml
 keyboard_remote:
-  device_name: 'Bluetooth Keyboard'
-  type: 'key_down'
+  device_name: "Bluetooth Keyboard"
+  type: "key_down"
 ```
 
 And an automation rule to breathe life into it:
 
 ```yaml
 automation:
-  alias: Keyboard all lights on
+  alias: "Keyboard all lights on"
   trigger:
     platform: event
     event_type: keyboard_remote_command_received
@@ -71,10 +93,11 @@ automation:
       key_code: 107 # inspect log to obtain desired keycode
   action:
     service: light.turn_on
-    entity_id: light.all
+    target:
+      entity_id: light.all
 ```
 
-`device_descriptor` or `device_name` may be specificed in the trigger so the automation will be fired only for that keyboard. This is especially useful if you wish to use several bluetooth remotes to control different devices. Omit them to ensure the same key triggers the automation for all keyboards/remotes.
+`device_descriptor` or `device_name` may be specificed in the trigger so the automation will be fired only for that keyboard. This is especially useful if you wish to use several Bluetooth remotes to control different devices. Omit them to ensure the same key triggers the automation for all keyboards/remotes.
 
 ## Disconnections
 
@@ -87,18 +110,19 @@ Here's an automation example that plays a sound through a media player whenever 
 
 ```yaml
 automation:
-  - alias: Keyboard Connected
+  - alias: "Keyboard Connected"
     trigger:
       platform: event
       event_type: keyboard_remote_connected
     action:
       - service: media_player.play_media
-        data:
+        target:
           entity_id: media_player.speaker
+        data:
           media_content_id: keyboard_connected.wav
           media_content_type: music
 
-  - alias: Bluetooth Keyboard Disconnected
+  - alias: "Bluetooth Keyboard Disconnected"
     trigger:
       platform: event
       event_type: keyboard_remote_disconnected
@@ -106,8 +130,9 @@ automation:
         device_name: "00:58:56:4C:C0:91"
     action:
       - service: media_player.play_media
-        data:
+        target:
           entity_id: media_player.speaker
+        data:
           media_content_id: keyboard_disconnected.wav
           media_content_type: music
 ```

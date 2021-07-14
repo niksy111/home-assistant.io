@@ -1,29 +1,28 @@
 ---
-title: "OctoPrint"
-description: "Instructions on how to setup the OctoPrint in Home Assistant."
-logo: octoprint.png
+title: OctoPrint
+description: Instructions on how to setup the OctoPrint in Home Assistant.
 ha_category:
   - Hub
   - Binary Sensor
   - Sensor
 ha_release: 0.19
 ha_iot_class: Local Polling
+ha_domain: octoprint
+ha_platforms:
+  - binary_sensor
+  - sensor
 ---
 
-[OctoPrint](http://octoprint.org/) is a web interface for your 3D printer. This is the main integration to integrate OctoPrint sensors.
+[OctoPrint](https://octoprint.org/) is a web interface for your 3D printer. This is the main integration to integrate OctoPrint sensors.
 
 There is currently support for the following device types within Home Assistant:
 
 - [Binary Sensor](#binary-sensor)
 - [Sensor](#sensor)
 
-<div class='note'>
-You must have the <a href="#configuration">OctoPrint component</a> configured (below) to use the sensor and binary sensor. After configuring that component, the sensors and binary sensors automatically appear.
-</div>
-
 ## Configuration
 
-To get started with the OctoPrint API, please follow the directions on their [site](http://docs.octoprint.org/en/master/api/general.html). Once OctoPrint is configured you will need to add your API key and host to your `configuration.yaml`.
+To get started with the OctoPrint API, please follow the directions on their [site](https://docs.octoprint.org/en/master/api/general.html). Once OctoPrint is configured you will need to add your API key and host to your `configuration.yaml`.
 
 ```yaml
 octoprint:

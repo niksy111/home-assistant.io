@@ -5,7 +5,9 @@ date: 2018-09-28 00:01:00
 date_formatted: "September 28, 2018"
 author: Paulus Schoutsen
 author_twitter: balloob
-categories: Release-Notes
+categories:
+- Release-Notes
+- Core
 og_image: /images/blog/2018-09-release-0.79/components.png
 ---
 
@@ -47,14 +49,14 @@ Oh, and yes, there is also some cool new integrations. Support has been added fo
 ## New Platforms
 
 - Add Huawei LTE router platform, device tracker, and sensor ([@scop] - [#16498]) ([device_tracker docs]) ([huawei_lte docs]) ([sensor.huawei_lte docs]) (new-platform)
-- New EDP re:dy component ([@abmantis] - [#16426]) ([edp_redy docs]) ([sensor.edp_redy docs]) ([switch.edp_redy docs]) (new-platform)
+- New EDP re:dy component ([@abmantis] - [#16426]) (new-platform)
 - Jewish calendar sensor ([@tsvi] - [#16393]) ([sensor.jewish_calendar docs]) (new-platform)
 - Added support for Starling Bank ([@Dullage] - [#16522]) ([sensor.starlingbank docs]) (new-platform)
 - Add Call Data Log platform. Mailboxes no longer require media ([@PhracturedBlue] - [#16579]) ([asterisk_mbox docs]) ([mailbox docs]) ([mailbox.asterisk_cdr docs]) ([mailbox.asterisk_mbox docs]) (new-platform)
 - Add Logi Circle component, camera and sensor platform ([@evanjd] - [#16540]) ([logi_circle docs]) ([camera.logi_circle docs]) ([sensor.logi_circle docs]) (new-platform)
 - deCONZ cover support ([@Kane610] - [#16759]) ([cover docs]) ([deconz docs]) ([cover.deconz docs]) (new-platform)
 - GeoJSON platform ([@exxamalte] - [#16610]) ([geo_location docs]) (new-platform)
-- Add linky sensor ([@tiste] - [#16468]) ([sensor.linky docs]) (new-platform)
+- Add linky sensor ([@tiste] - [#16468]) (new-platform)
 
 ## Release 0.79.1 - September 30
 
@@ -138,7 +140,7 @@ Experiencing issues introduced by this release? Please report them in our [issue
 - Store notifications in component. Add ws endpoint for fetching. ([@jeradM] - [#16503]) ([http docs]) ([persistent_notification docs])
 - Fixes an OpenUV bug with the scan interval ([@bachya] - [#16570]) ([openuv docs])
 - Bump pyeconet ([@w1ll1am23] - [#16571]) ([climate.econet docs])
-- yr: use async syntax ([@Danielhiversen] - [#16563]) ([sensor.yr docs])
+- yr: use async syntax ([@Danielhiversen] - [#16563])
 - Notifications for Android TV: Add fontsize and sending images ([@danielperna84] - [#16565]) ([notify docs])
 - Upgrade pytest to 3.8.0 and pytest-timeout to 1.3.2 ([@scop] - [#16489])
 - Refactor zha/async_device_initialized(). ([@Adminiuga] - [#16485]) ([zha docs])
@@ -172,7 +174,7 @@ Experiencing issues introduced by this release? Please report them in our [issue
 - Update developer doc links to developers.home-assistant.io ([@scop] - [#16622]) ([websocket_api docs])
 - Add valid_window=1 to TOTP verify ([@awarecan] - [#16625])
 - Add new devices to HomematicIP Cloud ([@mxworm] - [#16636]) ([binary_sensor.homematicip_cloud docs]) ([sensor.homematicip_cloud docs])
-- New EDP re:dy component ([@abmantis] - [#16426]) ([edp_redy docs]) ([sensor.edp_redy docs]) ([switch.edp_redy docs]) (new-platform)
+- New EDP re:dy component ([@abmantis] - [#16426]) (new-platform)
 - Upgrade Switchmate lib ([@Danielhiversen] - [#16637]) ([switch.switchmate docs])
 - Update pyhomematic to 0.1.49 ([@danielperna84] - [#16649]) ([homematic docs])
 - Upgrade holidays to 0.9.7 ([@fabaff] - [#16651]) ([binary_sensor.workday docs])
@@ -206,7 +208,7 @@ Experiencing issues introduced by this release? Please report them in our [issue
 - Upgrade youtube_dl to 2018.09.18 ([@fabaff] - [#16729]) ([media_extractor docs])
 - Met.no weather platform ([@Danielhiversen] - [#16582])
 - Upgrade keyring to 15.1.0 ([@fabaff] - [#16734])
-- Avoid calling yr update every second for a minute ones every hour ([@Danielhiversen] - [#16731]) ([sensor.yr docs])
+- Avoid calling yr update every second for a minute ones every hour ([@Danielhiversen] - [#16731])
 - Upgrade shodan to 1.10.2 ([@fabaff] - [#16736]) ([sensor.shodan docs])
 - Add subscription info endpoint ([@balloob] - [#16727]) ([cloud docs]) ([websocket_api docs])
 - Small cleanup for slack ([@pvizeli] - [#16743]) ([notify docs])
@@ -244,7 +246,7 @@ Experiencing issues introduced by this release? Please report them in our [issue
 - Handle netgear_lte connection errors ([@amelchio] - [#16806]) ([netgear_lte docs]) ([notify docs]) ([sensor.netgear_lte docs])
 - Improve opentherm_gw state detection ([@mvn23] - [#16809]) ([climate.opentherm_gw docs])
 - Rework chromecast fix ([@awarecan] - [#16804]) ([media_player.cast docs])
-- Add linky sensor ([@tiste] - [#16468]) ([sensor.linky docs]) (new-platform)
+- Add linky sensor ([@tiste] - [#16468]) (new-platform)
 - Use pyspcwebgw for SPC component ([@mbrrg] - [#16214]) ([spc docs]) ([alarm_control_panel.spc docs]) ([binary_sensor.spc docs])
 - Remove discovered MQTT Switch device when discovery topic is cleared ([@emontnemery] - [#16605]) ([mqtt docs]) ([switch.mqtt docs])
 - Allow split component definitions in packages ([@thomasloven] - [#16177])
@@ -486,7 +488,6 @@ Experiencing issues introduced by this release? Please report them in our [issue
 [deconz docs]: /integrations/deconz/
 [device_tracker docs]: /integrations/device_tracker/
 [ecovacs docs]: /integrations/ecovacs/
-[edp_redy docs]: /integrations/edp_redy/
 [fan.zha docs]: /integrations/zha
 [geo_location docs]: /integrations/geo_location/
 [google_assistant docs]: /integrations/google_assistant/
@@ -527,7 +528,6 @@ Experiencing issues introduced by this release? Please report them in our [issue
 [sensor.airvisual docs]: /integrations/airvisual
 [sensor.deconz docs]: /integrations/deconz#sensor
 [sensor.dyson docs]: /integrations/dyson#sensor
-[sensor.edp_redy docs]: /integrations/sensor.edp_redy/
 [sensor.homematicip_cloud docs]: /integrations/homematicip_cloud/
 [sensor.huawei_lte docs]: /integrations/huawei_lte#sensor
 [sensor.ios docs]: /integrations/sensor.ios/
@@ -549,14 +549,12 @@ Experiencing issues introduced by this release? Please report them in our [issue
 [sensor.twitch docs]: /integrations/twitch
 [sensor.velbus docs]: /integrations/velbus
 [sensor.wirelesstag docs]: /integrations/wirelesstag#sensor
-[sensor.yr docs]: /integrations/yr
 [sensor.zha docs]: /integrations/zha
 [shiftr docs]: /integrations/shiftr/
 [sonos docs]: /integrations/sonos/
 [spc docs]: /integrations/spc/
 [switch.broadlink docs]: /integrations/broadlink#switch
 [switch.deconz docs]: /integrations/deconz#switch
-[switch.edp_redy docs]: /integrations/switch.edp_redy/
 [switch.konnected docs]: /integrations/konnected#switch
 [switch.mqtt docs]: /integrations/switch.mqtt/
 [switch.switchmate docs]: /integrations/switchmate

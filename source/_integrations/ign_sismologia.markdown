@@ -1,15 +1,17 @@
 ---
-title: "IGN Sismología"
-description: "Instructions on how to integrate the Instituto Geográfico Nacional Sismología (Earthquakes) Feed feed into Home Assistant."
-logo: ign-sismologia.png
+title: IGN Sismología
+description: Instructions on how to integrate the Instituto Geográfico Nacional Sismología (Earthquakes) Feed feed into Home Assistant.
 ha_category:
   - Geolocation
 ha_iot_class: Cloud Polling
 ha_release: 0.92
+ha_codeowners:
+  - '@exxamalte'
+ha_domain: ign_sismologia
 ---
 
 The `ign_sismologia` platform lets you integrate a GeoRSS feed provided by the 
-Spanish [Instituto Geográfico Nacional](http://www.ign.es/) with information 
+Spanish [Instituto Geográfico Nacional](https://www.ign.es/) with information 
 about seismic events like earthquakes on the Iberian Peninsula and Canary 
 Islands. It retrieves incidents from a feed and shows information of those 
 incidents filtered by distance to Home Assistant's location.
@@ -21,7 +23,7 @@ on the default map automatically, or on a map card by defining the source
 of each entity.
 
 <p class='img'>
-  <img src='{{site_root}}/images/screenshots/ign-sismologia-feed-map.png' />
+  <img src='/images/screenshots/ign-sismologia-feed-map.png' />
 </p>
 
 The data is updated every 5 minutes.

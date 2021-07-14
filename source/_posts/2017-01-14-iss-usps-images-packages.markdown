@@ -5,7 +5,9 @@ date: 2017-01-14 08:04:05 +0000
 date_formatted: "January 15, 2017"
 author: Fabian Affolter
 author_twitter: fabaff
-categories: Release-Notes
+categories:
+- Release-Notes
+- Core
 og_image: /images/blog/2016-01-0.36/social.png
 ---
 
@@ -34,7 +36,7 @@ The new [image processing component][image] currently works with [number plates]
 
 ## All changes
 
-- Sensor: Support for [HydroQuebec][quebec] ([@titilambert])
+- Sensor: Support for HydroQuebec ([@titilambert])
 - Sensor: Tracking the [ISS][iss] ([@HydrelioxGitHub])
 - Sensor: USPS deliveries tracking ([@happyleavesaoc])
 - Device tracker: New [ping-based][ping] tracker ([@michaelarnauts])
@@ -53,7 +55,7 @@ The new [image processing component][image] currently works with [number plates]
 - Notify: [Lannouncer][lannouncer] TTS support ([@michaelarnauts])
 - Image processing: Support for [Image processing][image] ([@pvizeli])
 - Device tracker: [UPC][upc] Connect box platform support ([@pvizeli])
-- Weather: [Australian BOM][bom] (Bureau of Meteorology) support ([@Zac-HD])
+- Weather: Australian BOM (Bureau of Meteorology) support ([@Zac-HD])
 - Notify: Support for [MySensors][mysensors] notifications ([@MartinHjelmare])
 - TTS: New [Yandex SpeechKit TTS][yandex] integration ([@lupin-de-mid])
 - Notify: [Facebook Messenger][facebook] support ([@gopalkildoliya])
@@ -163,7 +165,6 @@ Experiencing issues introduced by this release? Please report them in our [issue
 [apns]: /integrations/apns
 [beaglebone]: /integrations/bbb_gpio/
 [bl-switch]: /integrations/broadlink#switch
-[bom]: /integrations/bom
 [dublin]: /integrations/dublin_bus_transport/
 [facebook]: /integrations/facebook
 [image]: /integrations/image_processing/
@@ -176,8 +177,7 @@ Experiencing issues introduced by this release? Please report them in our [issue
 [packages]: /topics/packages/
 [pico]: /integrations/picotts
 [ping]: /integrations/ping
-[plates]: /integrations/openalpr_local_local
-[quebec]: /integrations/hydroquebec
+[plates]: /integrations/openalpr_local/
 [rest]: /integrations/rest_command/
 [sma]: /integrations/sma#sensors
 [sonarr]: /integrations/sonarr
@@ -190,4 +190,3 @@ Experiencing issues introduced by this release? Please report them in our [issue
 [yandex]: /integrations/yandextts
 [yeelight]: /integrations/yeelight
 [zengge]: /integrations/zengge
-

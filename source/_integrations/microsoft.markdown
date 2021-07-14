@@ -1,14 +1,16 @@
 ---
-title: "Microsoft Text-to-Speech"
-description: "Instructions on how to set up Microsoft Text-to-Speech with Home Assistant."
-logo: microsoft.png
+title: Microsoft Text-to-Speech (TTS)
+description: Instructions on how to set up Microsoft Text-to-Speech with Home Assistant.
 ha_category:
   - Text-to-speech
+ha_iot_class: Cloud Push
 ha_release: 0.57
+ha_domain: microsoft
+ha_platforms:
+  - tts
 ---
 
-The `microsoft` text-to-speech platform uses [Microsoft Text-to-Speech engine](https://docs.microsoft.com/en-us/azure/cognitive-services/speech/home) to read a text with natural sounding voices. This integration uses an API that is part of the Cognitive Services offering and is known as the Bing Speech API.
-You will need an API key, which is free. You can use your [Azure subscription](https://azure.microsoft.com) or get an API key on the [Cognitive Services site](https://azure.microsoft.com/en-us/try/cognitive-services/).
+The `microsoft` text-to-speech platform uses the [TTS engine of the Microsoft Speech Service](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/text-to-speech) to read a text with natural sounding voices. This integration uses an API that is part of the Cognitive Services offering and is known as the Microsoft Speech API. For this integration to work, you need a free API key. You can use your [Azure subscription](https://azure.microsoft.com) to create an [Azure Speech resource](https://portal.azure.com/#create/Microsoft.CognitiveServicesSpeechServices).
 
 ## Configuration
 
@@ -37,7 +39,7 @@ gender:
   type: string
   default: "`Female`"
 type:
-  description: "The voice type you want to use. Accepted values are listed as the service name mapping [in the documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/Speech/api-reference-rest/bingvoiceoutput)."
+  description: "The voice type you want to use. Accepted values are listed as the service name mapping [in the documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support#text-to-speech)."
   required: false
   type: string
   default: "`ZiraRUS`"
@@ -57,10 +59,21 @@ pitch:
   type: string
   default: "`default`"
 contour:
-  description: "Change the contour of the output in percentages. This overrides the pitch setting. See the [W3 SSML specification](http://www.w3.org/TR/speech-synthesis/#pitch_contour) for what it does. Example value: `(0,0) (100,100)`."
+  description: "Change the contour of the output in percentages. This overrides the pitch setting. See the [W3 SSML specification](https://www.w3.org/TR/speech-synthesis/#pitch_contour) for what it does. Example value: `(0,0) (100,100)`."
   required: false
   type: string
+region:
+  description: "The region of your API endpoint. See [documentation](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/regions)."
+  required: false
+  type: string
+  default: "`eastus`"
 {% endconfiguration %}
+
+<div class='note'>
+
+Not all Azure regions support high-quality neural voices. Use [this overview](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/regions#standard-and-neural-voices) to determine the availability of standard and neural voices by region/endpoint.
+
+</div>
 
   
 ## Full configuration example
@@ -79,4 +92,5 @@ tts:
     volume: -50
     pitch: high
     contour: (0, 0) (100, 100)
+    region: eastus
 ```

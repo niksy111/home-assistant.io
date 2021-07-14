@@ -5,7 +5,9 @@ date: 2018-11-09 00:01:00
 date_formatted: "November 9, 2018"
 author: Paulus Schoutsen
 author_twitter: balloob
-categories: Release-Notes
+categories:
+- Release-Notes
+- Core
 og_image: /images/blog/2018-11-release-82/lovelace-edit.png
 ---
 
@@ -45,7 +47,7 @@ And we have one more thing… we have soft-forked Open Z-Wave and have added sup
 - cancel off_delay action ([@dgomes] - [#18389]) ([binary_sensor.mqtt docs])
 - Changed checking of cover state closed from 0 to closed_position variable. ([@pszafer] - [#18407]) ([cover.mqtt docs])
 - updated pydaikin version ([@fredrike] - [#18413]) ([daikin docs]) ([climate.daikin docs])
-- edp_redy: increase UPDATE_INTERVAL ([@abmantis] - [#18429]) ([edp_redy docs])
+- edp_redy: increase UPDATE_INTERVAL ([@abmantis] - [#18429])
 - Update pyozw to 0.1.1 ([@pvizeli] - [#18436]) ([zwave docs])
 - Fix AsusWRT ([@kennedyshead] - [#18400])
 
@@ -72,7 +74,6 @@ And we have one more thing… we have soft-forked Open Z-Wave and have added sup
 [climate.daikin docs]: /integrations/daikin#climate
 [cover.mqtt docs]: /integrations/cover.mqtt/
 [daikin docs]: /integrations/daikin/
-[edp_redy docs]: /integrations/edp_redy/
 [image_processing.tensorflow docs]: /integrations/tensorflow
 [notify docs]: /integrations/notify/
 [sense docs]: /integrations/sense/
@@ -215,7 +216,7 @@ Experiencing issues introduced by this release? Please report them in our [issue
 - Mill service ([@Danielhiversen] - [#17971]) ([climate.mill docs])
 - Refactor Alexa API, fix thermostats ([@bitglue] - [#17969]) ([alexa docs])
 - Upgrade aiofreepybox ([@stilllman] - [#17989]) ([device_tracker docs])
-- Reverse out change #14234 BOM Weather throttle fix ([@nickw444] - [#17468]) ([sensor.bom docs])
+- Reverse out change #14234 BOM Weather throttle fix ([@nickw444] - [#17468])
 - RFC: Static templates match no entities, not all ([@amelchio] - [#17991])
 - Switch mailgun webhooks to the new Mailgun webhook api ([@rohankapoorcom] - [#17919]) ([mailgun docs])
 - Change hebrew date at sunset ([@tsvi] - [#17449]) ([sensor.jewish_calendar docs])
@@ -646,7 +647,6 @@ Experiencing issues introduced by this release? Please report them in our [issue
 [route53 docs]: /integrations/route53/
 [rpi_pfio docs]: /integrations/rpi_pfio/
 [scene.deconz docs]: /integrations/deconz#scene
-[sensor.bom docs]: /integrations/bom#sensor
 [sensor.darksky docs]: /integrations/darksky
 [sensor.deconz docs]: /integrations/deconz#sensor
 [sensor.dte_energy_bridge docs]: /integrations/dte_energy_bridge

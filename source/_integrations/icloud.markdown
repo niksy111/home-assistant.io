@@ -1,70 +1,77 @@
 ---
-title: "iCloud"
-description: "Instructions on how to use iCloud to track devices in Home Assistant."
-logo: icloud.png
+title: Apple iCloud
+description: Instructions on how to use iCloud to track devices in Home Assistant.
 ha_category:
   - Presence Detection
-ha_release: "0.10"
+  - Sensor
+ha_iot_class: Cloud Polling
+ha_release: '0.10'
+ha_config_flow: true
+ha_codeowners:
+  - '@Quentame'
+  - '@nzapponi'
+ha_domain: icloud
+ha_platforms:
+  - device_tracker
+  - sensor
 ---
 
+The `icloud` integration allows you to detect presence using the [iCloud](https://www.icloud.com/) service. iCloud allows users to track their location on iOS devices.
 
-The `icloud` platform allows you to detect presence using the [iCloud](https://www.icloud.com/) service. iCloud allows users to track their location on iOS devices.
+There is currently support for the following platforms within Home Assistant:
 
-It does require that your device is registered with "Find My iPhone".
+- [Device Tracker](#device-tracker)
+- [Sensor](#sensor)
 
-To integrate iCloud in Home Assistant, add the following section to your `configuration.yaml` file:
+It does require that your devices are registered with the [Find My](https://www.apple.com/uk/icloud/find-my/) service.
 
-```yaml
-# Example configuration.yaml entry
-device_tracker:
-  - platform: icloud
-    username: USERNAME
-    password: PASSWORD
-    account_name: accountname
-```
-
-{% configuration %}
-username:
-  description: The username for the iCloud account.
-  required: true
-  type: string
-password:
-  description: The password for your given username.
-  required: true
-  type: string
-account_name:
-  description: The friendly name for the account_name. If this isn't given, it will use the account_name of the username (so the part before the `@` in the email address).
-  required: false
-  type: string
-max_interval:
-  description: Maximum interval in minutes between subsequent location upates. This tracker uses dynamic intervals for requesting location updates. When iphone is stationary, interval will eventually be set to `max_interval` to save battery. When iphone starts moving again interval will be dynamically updated to 1 min. Note that updating interval to 1 min might be delayed by maximum `max_interval` minutes. Minimum value is 1 min.
-  required: false
-  default: 30
-  type: integer
-gps_accuracy_threshold:
-  description: iCloud location updates come with some gps_accuracy varying from 10 to 5000 meters. This setting defines the accuracy threshold in meters for a location update. Less accurate updates will be discarded by this tracker. This allows more precise location monitoring and fewer false positive zone changes.
-  required: false
-  default: 1000
-  type: integer
-{% endconfiguration %}
+{% include integrations/config_flow.md %}
 
 <div class='note warning'>
+You may receive an email and a notification from Apple saying that someone has logged into your account.
 
-Low `max_interval` may cause battery drainage as it wakes up your device to get the current location.
-
+For the notification, press "Allow", then "OK".
 </div>
 
-<div class='note warning'>
-You may receive an email from Apple stating that someone has logged into your account.
-</div>
+If two-step authentication is enabled for your iCloud account, some time after Home Assistant startup the integration will ask to enter the verification code you receive on your device via a notification in the Home Assistant UI. The duration of this authentication is determined by Apple, so you will need to verify your account every now and then.
 
-To disable the drainage of the battery, a dynamic interval is being used for each individual device instead of a fixed interval for all devices linked to one account. The dynamic interval is based on the current zone of a device, the distance towards home and the battery level of the device.
+To prevent excessive battery drainage, a dynamic interval is used for each individual device instead of a fixed interval for all devices linked to one account. The dynamic interval is based on the current zone of a device, the distance towards home and the battery level of the device.
 
-If 2 Step Authentication is enabled for your iCloud account. The integration will ask which device you want to use as Trusted Device and integration will send a prompt to that device with the code which you can enter in Home Assistant. The duration of this authentication is determined by Apple, but is now at 2 months, so you will only need to verify your account each two months.
-2 Factor Authentication is the improved version of 2 Step Authentication, this is still not supported by the pyicloud library. Therefore it's not possible to use it with the device_tracker yet.
+## In case of troubleshooting
 
-4 services are available for this component:
-- **icloud_update**: This service can be used to ask for an update of a certain iDevice. The `account_name` and `device_name` are optional. Request will result in new Home Assistant [state_changed](/docs/configuration/events/#event-state_changed) event describing current iphone location. Can be used in automations when manual location update is needed, e.g., to check if anyone is home when door's been opened.
-- **icloud_lost_iphone**: This service will play the Lost iPhone sound on a certain iDevice. The `account_name` and `device_name` are optional.
-- **icloud_set_interval**: This service will change the dynamic interval of an iDevice. The `account_name` and `device_name` are optional. If `interval` is used in the service_data, the iDevice will be updated with that new interval. That interval will be fixed until the iDevice changes zone or if this service is called again. If `interval` isn't used in the service_data, the interval for that iDevice will revert back to its default dynamic interval based on its current zone, its distance towards home and its battery level.
-- **icloud_reset_account**: This service can be used to reset an iCloud account. This is helpful when not all devices are found by the integration or if you have added a new iDevice to your account. The `account_name` is optional.
+Go into your Home Assistant configuration `.storage` folder and delete the "icloud" folder, then retry.
+
+## Platforms
+
+### Device Tracker
+
+The iCloud integration will track available devices on your iCloud account.
+
+### Sensor
+
+The iCloud integration will add a battery sensor for each iCloud devices available on your iCloud account.
+
+## Services
+
+4 services are available:
+
+### Service `icloud.update`
+
+This service can be used to ask an update of a certain iDevice or all devices linked to an iCloud account. Request will result in new Home Assistant [state_changed](/docs/configuration/events/#event-state_changed) event describing current iPhone location. It can be used in automations when a manual location update is needed, e.g., to check if anyone is home when a door has been opened.
+
+### Service `icloud.play_sound`
+
+This service will play the Lost iPhone sound on your iDevice. It will still ring if you are on "Mute" or "Do not disturb" mode.
+
+| Service data attribute    | Optional | Description                                             |
+|---------------------------|----------|---------------------------------------------------------|
+| `account`                 |       no | E-mail address of the iCloud account                    |
+| `device_name`             |       no | Human Friendly device name like Bob's iPhone            |
+
+### Service `icloud.display_message`
+
+This service will display a message on your iDevice. It can also ring your device.
+
+### Service `icloud.lost_device`
+
+This service will put your iDevice on "lost" mode (compatible devices only). You have to provide a phone number with a suffixed [country code](https://en.wikipedia.org/wiki/List_of_country_calling_codes) and a message.

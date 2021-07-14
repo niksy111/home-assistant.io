@@ -1,11 +1,15 @@
 ---
-title: "Tautulli activity sensor"
-description: "Instructions on how to set up Tautulli sensors in Home Assistant."
-logo: tautulli.png
+title: Tautulli
+description: Instructions on how to set up Tautulli sensors in Home Assistant.
 ha_category:
   - Sensor
 ha_release: 0.82
 ha_iot_class: Local Polling
+ha_codeowners:
+  - '@ludeeus'
+ha_domain: tautulli
+ha_platforms:
+  - sensor
 ---
 
 The `tautulli` sensor platform will monitor activity on a given [Tautulli Server][tautulli]. It will create a sensor that shows the number of currently active streams as the state. If you click the sensor for more details it will show you more statistics, the following stats are available by default:
@@ -54,7 +58,7 @@ port:
   default: 8181
   type: integer
 path:
-  description: The Base Url path of your Tautulli server.
+  description: The Base URL path of your Tautulli server.
   required: false
   type: string
 ssl:

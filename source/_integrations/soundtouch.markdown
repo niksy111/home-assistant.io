@@ -1,11 +1,13 @@
 ---
-title: "Soundtouch"
-description: "Instructions on how to integrate Bose Soundtouch devices into Home Assistant."
-logo: soundtouch.png
+title: Bose Soundtouch
+description: Instructions on how to integrate Bose Soundtouch devices into Home Assistant.
 ha_category:
   - Media Player
 ha_release: 0.34
 ha_iot_class: Local Polling
+ha_domain: soundtouch
+ha_platforms:
+  - media_player
 ---
 
 The `soundtouch` platform allows you to control your [Bose Soundtouch](https://www.soundtouch.com/) speakers from Home Assistant.
@@ -60,8 +62,9 @@ You can switch between one of your 6 pre-configured presets using ```media_playe
 ```yaml
 # Play media preset
 - service: media_player.play_media
-  data:
+  target:
     entity_id: media_player.soundtouch_living_room
+  data:
     media_content_id: 1..6
     media_content_type: PLAYLIST
 ```
@@ -71,8 +74,9 @@ You can also play HTTP (not HTTPS) URLs:
 ```yaml
 # Play media URL
 - service: media_player.play_media
-  data:
+  target:
     entity_id: media_player.soundtouch_living_room
+  data:
     media_content_id: http://example.com/music.mp3
     media_content_type: MUSIC
 ```
@@ -81,9 +85,9 @@ You can also play HTTP (not HTTPS) URLs:
 
 You can use TTS services like [Google Text-to-Speech](/integrations/google_translate) or [Amazon Polly](/integrations/amazon_polly) only if your Home Assistant is configured in HTTP and not HTTPS (current device limitation, a firmware upgrade is planned).
 
-A workaround if you want to publish your Home Assistant installation on Internet in SSL is to configure an HTTPS Web Server as a reverse proxy ([nginx](/docs/ecosystem/nginx/) for example) and let your Home Assistant configuration in HTTP on your local network. The Soundtouch devices will be available to access the TTS files in HTTP in local and your configuration will be in HTTPS on the Internet.
+A workaround if you want to publish your Home Assistant installation on Internet in SSL is to configure an HTTPS Web Server as a reverse proxy ([NGINX](/docs/ecosystem/nginx/) for example) and let your Home Assistant configuration in HTTP on your local network. The Soundtouch devices will be available to access the TTS files in HTTP in local and your configuration will be in HTTPS on the Internet.
 
-### Service `soundtouch_play_everywhere`
+### Service `play_everywhere`
 
 Create a multi-room (zone) from a master and play same content on all other
  devices (slaves)
@@ -92,7 +96,7 @@ Create a multi-room (zone) from a master and play same content on all other
 | ---------------------- | -------- | ----------- |
 | `master` | no | `entity_id` of the master device
 
-### Service `soundtouch_create_zone`
+### Service `create_zone`
 
 Create a multi-room (zone) from a master and play on selected slaves
 
@@ -101,7 +105,7 @@ Create a multi-room (zone) from a master and play on selected slaves
 | `master` | no | `entity_id` of the master device|
 | `slaves` | no | List of slaves `entity_id`      |
 
-### Service `soundtouch_add_zone_slave`
+### Service `add_zone_slave`
 
 Add slave(s) to an existing zone
 
@@ -110,7 +114,7 @@ Add slave(s) to an existing zone
 | `master` | no | `entity_id` of the master device |
 | `slaves` | no | List of slaves `entity_id` to add|
 
-### Service `soundtouch_remove_zone_slave`
+### Service `remove_zone_slave`
 
 Remove slave(s) from an existing zone.
 

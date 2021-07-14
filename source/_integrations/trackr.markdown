@@ -1,13 +1,14 @@
 ---
-title: "TrackR"
-description: "Instructions on how to use TrackR to track devices in Home Assistant."
-logo: trackr.png
+title: TrackR
+description: Instructions on how to use TrackR to track devices in Home Assistant.
 ha_release: 0.36
 ha_category:
   - Presence Detection
 ha_iot_class: Cloud Polling
+ha_domain: trackr
+ha_platforms:
+  - device_tracker
 ---
-
 
 The `trackr` platform allows you to detect presence using [TrackR](https://www.thetrackr.com/) devices.
 
@@ -33,4 +34,3 @@ password:
   required: true
   type: string
 {% endconfiguration %}
-

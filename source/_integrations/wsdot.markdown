@@ -1,18 +1,20 @@
 ---
-title: "Washington State DOT"
-description: "Instructions on how to integrate WSDOT data into your home."
-logo: wsdot.png
+title: Washington State Department of Transportation (WSDOT)
+description: Instructions on how to integrate WSDOT data into your home.
 ha_category:
   - Transport
 ha_iot_class: Cloud Polling
 ha_release: 0.37
+ha_domain: wsdot
+ha_platforms:
+  - sensor
 ---
 
-The `wsdot` sensor will give you travel time information from the [Washington State Department of Transportation (WSDOT)](http://wsdot.com/).
+The `wsdot` sensor will give you travel time information from the [Washington State Department of Transportation (WSDOT)](https://wsdot.com/).
 
 ## Setup
 
-First, you need to get a free Traveler Information `api_key` from the [WSDOT API webpage](http://wsdot.com/traffic/api/). Just enter your email address to instantly get the key.
+First, you need to get a free Traveler Information `api_key` from the [WSDOT API webpage](https://wsdot.com/traffic/api/). Just enter your email address to instantly get the key.
 
 ## Configuration
 
@@ -49,7 +51,7 @@ travel_time:
       type: string
 {% endconfiguration %}
 
-Figuring out which Travel Time ID (`id`) is associated with your routes is a bit of a challenge. If you visit `http://wsdot.com/Traffic/api/TravelTimes/TravelTimesREST.svc/GetTravelTimesAsJson?AccessCode=[your_api_key_here]` substituting your `api_key`, you will get a list of all available routes. Search through it and then find the key `TravelTimeID`. That tells you the number you need.
+Figuring out which Travel Time ID (`id`) is associated with your routes is a bit of a challenge. If you visit `https://wsdot.com/Traffic/api/TravelTimes/TravelTimesREST.svc/GetTravelTimesAsJson?AccessCode=[your_api_key_here]` substituting your `api_key`, you will get a list of all available routes. Search through it and then find the key `TravelTimeID`. That tells you the number you need.
 
 Some common examples include:
 
@@ -87,5 +89,5 @@ WSDOT does provide information about ferry schedules, mountain passes, tolls, et
 Here's an example of the sensor in use:
 
 <p class='img'>
-  <img src='{{site_root}}/images/screenshots/wsdot_sensor.png' />
+  <img src='/images/screenshots/wsdot_sensor.png' />
 </p>

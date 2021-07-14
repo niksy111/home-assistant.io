@@ -1,14 +1,20 @@
 ---
-title: "LaMetric"
-description: "Instructions on how to integrate LaMetric with Home Assistant."
+title: LaMetric
+description: Instructions on how to integrate LaMetric with Home Assistant.
 logo: lametric.png
 ha_category:
   - Hub
   - Notifications
+ha_iot_class: Cloud Push
 ha_release: 0.49
+ha_codeowners:
+  - '@robbiet480'
+ha_domain: lametric
+ha_platforms:
+  - notify
 ---
 
-[LaMetric Time](http://lametric.com) is a smart clock that can be used to access applications, listen to web radio and display notifications.
+[LaMetric Time](https://lametric.com/) is a smart clock that can be used to access applications, listen to web radio and display notifications.
 
 There is currently support for the following device types within Home Assistant:
 
@@ -33,7 +39,7 @@ These are the steps to take:
 3. Fill in the form. You can put almost anything in the fields, they just need to be populated:
   * App Name: Home Assistant 
   * Description: Home Assistant
-  * Privacy Policy: http://localhost/
+  * Privacy Policy: `http://localhost/`
   * Check all permission boxes
   * Hit Save
 4. You should be directed to your [Notification Apps list](https://developer.lametric.com/applications/sources), click on "Home Assistant", copy your client ID and client Secret and paste into the Home Assistant configuration block in the previous section.
@@ -65,22 +71,26 @@ lifetime:
   type: integer
   default: 10
 icon:
-  description: An icon or animation.
+  description: An icon or animation. List of all icons available at [https://developer.lametric.com/icons](https://developer.lametric.com/icons). Note that icons always begin with "i" while animations begin with "a". This is part of the name, you can't just use the number!
   required: false
   type: string
 cycles:
-  description: Defines how often the notification is displayed.
+  description: Defines how long the notification will be displayed. Set to 0 to require manual dismissal
   required: false
   type: integer
   default: 1
 priority:
-  description: Defines the priority of the notification.
+  description: Defines the priority of the notification. Allowed values are info, warning, and critical
   required: false
   type: string
   default: warning
+icon_type:
+  description: Defines the nature of notification. Allowed values are none, info, and alert
+  required: false
+  type: string
+  default: info
 {% endconfiguration %}
 
-Check out the list of all icons at [https://developer.lametric.com/icons](https://developer.lametric.com/icons). Note that icons always begin with "i" while animations begin with "a". This is part of the name, you can't just use the number!
 
 ## Examples
 
@@ -95,6 +105,7 @@ notify:
   icon: a7956
   cycles: 3
   priority: info
+  icon_type: none
 ```
 
 ### Changing sounds and icons
@@ -106,17 +117,18 @@ To add a notification sound, icon, cycles, or priority override, it has to be do
   trigger:
     platform: state
     entity_id: device_tracker.son_mobile
-    from: 'not_home'
-    to: 'school'
+    from: "not_home"
+    to: "school"
   action:
     service: notify.lametric
     data:
       message: "Son has arrived at school!"
       data:
-        sound: 'notification'
-        icon: 'i51'
+        sound: "notification"
+        icon: "i51"
         cycles: 0
-        priority: 'critical'
+        priority: "critical"
+        icon_type: "none"
 ```
 
 ### Only notify specific device
@@ -130,8 +142,8 @@ If you have more than one La Metric device, you can specify which will receive t
       message: "Son has arrived at school!"
       target: "Office LaMetric"
       data:
-        sound: 'notification'
-        icon: 'i51'
+        sound: "notification"
+        icon: "i51"
  ```
 
  If target is not specified, all LaMetric devices will be notified.

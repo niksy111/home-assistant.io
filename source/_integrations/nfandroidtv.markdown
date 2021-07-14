@@ -1,10 +1,13 @@
 ---
-title: "Notifications for Android TV / FireTV"
-description: "Notifications for Android TV / FireTV"
-logo: nfandroidtv.png
+title: Notifications for Android TV / FireTV
+description: Notifications for Android TV / FireTV
 ha_category:
   - Notifications
 ha_release: 0.32
+ha_domain: nfandroidtv
+ha_iot_class: Local Push
+ha_platforms:
+  - notify
 ---
 
 Notification platform for [Notifications for Android TV](https://play.google.com/store/apps/details?id=de.cyberdream.androidtv.notifications.google) and [Notifications for FireTV](https://play.google.com/store/apps/details?id=de.cyberdream.firenotifications.google). You can use this plarform to send notifications to your Android TV device. An overlay with the message content will appear for a configurable amount of seconds and then disapper again. Sending images (e.g., security cam) is supported too.
@@ -59,7 +62,7 @@ transparency:
   default: 25%
   type: string
 timeout:
-  description: The timeout in seconds.
+  description: The timeout in seconds for trying to send the notification to the device.
   required: false
   default: 5
   type: integer
@@ -97,8 +100,8 @@ The following attributes can be placed inside `data` to send images.
 | `file`                 |      yes | Groups the attributes for file upload. If present, either `url` or `path` have to be provided.
 | `path`                |      yes | Local path of an image file. Is placed inside `file`.
 | `url`                  |      yes | URL of an image file. Is placed inside `file`.
-| `username`             |      yes | Username if the url requires authentication. Is placed inside `file`.
-| `password`             |      yes | Password if the url requires authentication. Is placed inside `file`.
+| `username`             |      yes | Username if the URL requires authentication. Is placed inside `file`.
+| `password`             |      yes | Password if the URL requires authentication. Is placed inside `file`.
 | `auth`                 |      yes | If set to `digest` HTTP-Digest-Authentication is used. If missing, HTTP-BASIC-Authentication is used. Is placed inside `file`.
 
 Example for posting file from URL:
@@ -132,4 +135,4 @@ Example for posting file from local path:
 }
 ```
 
-Please note that `path` is validated against the `whitelist_external_dirs` in the `configuration.yaml`.
+Please note that `path` is validated against the `allowlist_external_dirs` in the `configuration.yaml`.

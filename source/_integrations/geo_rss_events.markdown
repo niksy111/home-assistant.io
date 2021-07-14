@@ -1,11 +1,15 @@
 ---
-title: GeoRSS Events Sensor
-description: "Instructions on how to set up GeoRSS sensors within Home Assistant."
-logo: rss.png
+title: GeoRSS
+description: Instructions on how to set up GeoRSS sensors within Home Assistant.
 ha_category:
   - Sensor
 ha_iot_class: Cloud Polling
 ha_release: 0.55
+ha_codeowners:
+  - '@exxamalte'
+ha_domain: geo_rss_events
+ha_platforms:
+  - sensor
 ---
 
 The `geo_rss_events` sensor retrieves events from a GeoRSS feed and shows information of those events filtered by distance to Home Assistant's location and grouped by category.
@@ -13,7 +17,7 @@ The `geo_rss_events` sensor retrieves events from a GeoRSS feed and shows inform
 This sensor is particularly useful if events occur unexpectedly in the vicinity of the home while the GeoRSS feed also contains many events representing distant unrelated entries. Typical examples are bush fires alerts or earthquakes.
 
 <p class='img'>
-  <img src='{{site_root}}/images/screenshots/geo-rss-incidents-group-screenshot.png' />
+  <img src='/images/screenshots/geo-rss-incidents-group-screenshot.png' />
 </p>
 
 The reference point for comparing the distance is by default defined by `latitude` and `longitude` in the basic configuration.
@@ -31,8 +35,8 @@ To enable the GeoRSS events sensor, add the following lines to your `configurati
 sensor:
   - platform: geo_rss_events
     name: NSW Fire Service
-    url: http://www.rfs.nsw.gov.au/feeds/majorIncidents.xml
-    unit_of_measurement: 'Incidents'
+    url: https://www.rfs.nsw.gov.au/feeds/majorIncidents.xml
+    unit_of_measurement: "Incidents"
     categories:
       - 'Emergency Warning'
       - 'Watch and Act'
@@ -85,17 +89,17 @@ sensor:
   - platform: geo_rss_events
     name: Qld Fire and Emergency Services
     url: https://www.qfes.qld.gov.au/data/alerts/bushfireAlert.xml
-    unit_of_measurement: 'Alerts'
+    unit_of_measurement: "Alerts"
   - platform: geo_rss_events
     name: Tas Fire Service
     url: http://www.fire.tas.gov.au/Show?pageId=colBushfireSummariesRss
-    unit_of_measurement: 'Alerts'
+    unit_of_measurement: "Alerts"
   - platform: geo_rss_events
     name: WA Department of Fire and Emergency Services
     url: https://www.emergency.wa.gov.au/data/incident_FCAD.rss
   - platform: geo_rss_events
     name: ACT Emergency Services Agency
-    url: http://www.esa.act.gov.au/feeds/currentincidents.xml
+    url: https://www.esa.act.gov.au/feeds/currentincidents.xml
 ```
 
 
@@ -111,7 +115,7 @@ sensor:
       - 'Past Day'
   - platform: geo_rss_events
     name: BGS Worlwide Earthquakes
-    url: http://www.bgs.ac.uk/feeds/worldSeismology.xml
+    url: https://www.bgs.ac.uk/feeds/worldSeismology.xml
     categories:
       - 'EQMH'
   - platform: geo_rss_events

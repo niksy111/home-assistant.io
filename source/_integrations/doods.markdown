@@ -1,28 +1,32 @@
 ---
-title: "DOODS"
-description: "Detect and recognize objects with DOODS."
+title: DOODS - Dedicated Open Object Detection Service
+description: Detect and recognize objects with DOODS.
 ha_category:
   - Image Processing
 ha_iot_class: Local Polling
-ha_release: "0.100"
+ha_release: '0.100'
+ha_domain: doods
 ---
 
-The `doods` image processing platform allows you to detect and recognize objects in a camera image using [DOODS](https://github.com/snowzach/doods/). The state of the entity is the number of objects detected, and recognized objects are listed in the `summary` attribute along with quantity. The `matches` attribute provides the confidence `score` for recognition and the bounding `box` of the object for each detection category.
+The `doods` image processing integration allows you to detect and recognize objects in a camera image using [DOODS](https://github.com/snowzach/doods/). The state of the entity is the number of objects detected and recognized objects are listed in the `summary` attribute along with quantity. The `matches` attribute provides the confidence `score` for recognition and the bounding `box` of the object for each detection category.
 
 ## Setup
 
-You need to have DOODS running somewhere. It's easiest to run as a docker container and deployment is described on docker hub 
-[DOODS - Docker](https://hub.docker.com/r/snowzach/doods)
+The DOODS software needs to be running before this integration can be used. Options to run the DOODS software:
+
+- Run as [Home Assistant add-on](https://github.com/snowzach/hassio-addons)
+- Run as a [Docker container](https://hub.docker.com/r/snowzach/doods)
 
 ## Configuration
 
-The configuration loosely follows the tensorflow configuration. To enable this platform in your installation, add the following to your `configuration.yaml` file:
+To enable this integration in your installation, add the following to your `configuration.yaml` file:
 
 ```yaml
 # Example configuration.yaml entry
 image_processing:
   - platform: doods
     url: "http://<my doods server>:8080"
+    detector: default
     source:
       - entity_id: camera.front_yard
 ```
@@ -42,17 +46,56 @@ source:
       required: false
       type: string
 url:
-    description: The URL of the DOODS server
+    description: The URL of the DOODS server.
     required: true
     type: string
-detector:
-    description: The DOODS detector to use
+auth_key:
+    description: The authentication key as set in the DOODS configuration file or as a Docker environment variable (DOODS_AUTH_KEY)
     required: false
     type: string
+timeout:
+    description: Timeout for requests (in seconds).
+    required: false
+    type: integer
+    default: 90
+detector:
+    description: The DOODS detector to use.
+    required: true
+    type: string
 confidence:
-    description: The default confidence for any detected objects where not explicitly set
+    description: The default confidence for any detected objects where not explicitly set.
     required: false
     type: float
+area:
+    description: Global detection area. Objects in this box will be reported. Top of image is 0, bottom is 1.  Same left to right.
+    required: false
+    type: map
+    keys:
+      top:
+        description: Top line defined as % from top of image.
+        required: false
+        type: float
+        default: 0
+      left:
+        description: Left line defined as % from left of image.
+        required: false
+        type: float
+        default: 0
+      bottom:
+        description: Bottom line defined as % from top of image.
+        required: false
+        type: float
+        default: 1
+      right:
+        description: Right line defined as % from left of image.
+        required: false
+        type: float
+        default: 1
+      covers:
+        description: If true the detection must be fully in this box. If false any part of the detection in the box will trigger. 
+        required: false
+        type: boolean
+        default: true
 file_out:
     description: A [template](/docs/configuration/templating/#processing-incoming-data) for the integration to save processed images including bounding boxes. `camera_entity` is available as the `entity_id` string of the triggered source camera.
     required: false
@@ -67,7 +110,7 @@ labels:
         required: true
         type: string
       confidence:
-       description: The minimum confidence for the selected label
+       description: The minimum confidence for the selected label.
        required: false
        type: float
       area:
@@ -95,23 +138,45 @@ labels:
             required: false
             type: float
             default: 1
+          covers:
+            description: If true the detection must be fully in this box. If false any part of the detection in the box will trigger. 
+            required: false
+            type: boolean
+            default: true
 
 {% endconfiguration %}
 
+## Supported labels
+
+Both detectors "default" and "tensorflow" use the labels in [this file](https://raw.githubusercontent.com/amikelive/coco-labels/master/coco-labels-2014_2017.txt).
+
+## Sample configuration
+
+{% raw %}
+
 ```yaml
 # Example advanced configuration.yaml entry
-# Example configuration.yaml entry
 image_processing:
   - platform: doods
     scan_interval: 1000
     url: "http://<my doods server>:8080"
+    timeout: 60
     detector: default
+    auth_key: 2up3rL0ng4uthK3y
     source:
       - entity_id: camera.front_yard
     file_out:
-      - "/tmp/{% raw %}{{ camera_entity.split('.')[1] }}{% endraw %}_latest.jpg"
-      - "/tmp/{% raw %}{{ camera_entity.split('.')[1] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}{% endraw %}.jpg"
+      - "/tmp/{{ camera_entity.split('.')[1] }}_latest.jpg"
+      - "/tmp/{{ camera_entity.split('.')[1] }}_{{ now().strftime('%Y%m%d_%H%M%S') }}.jpg"
     confidence: 50
+    # This global detection area is required for all labels
+    area:
+      # Exclude top 10% of image
+      top: 0.1
+      # Exclude right 5% of image
+      right: 0.95
+      # The entire detection must be inside this box
+      covers: true
     labels:
       - name: person
         confidence: 40
@@ -120,13 +185,17 @@ image_processing:
           top: 0.1
           # Exclude right 15% of image
           right: 0.85
+          # Any part of the detection inside this area will trigger
+          covers: false
       - car
       - truck
 ```
 
-## Optimising resources
+{% endraw %}
 
-[Image processing components](/components/image_processing/) process the image from a camera at a fixed period given by the `scan_interval`. This leads to excessive processing if the image on the camera hasn't changed, as the default `scan_interval` is 10 seconds. You can override this by adding to your config `scan_interval: 10000` (setting the interval to 10,000 seconds), and then call the `image_processing.scan` service when you actually want to perform processing.
+## Optimizing resources
+
+The [Image processing integration](/components/image_processing/) process the image from a camera at a fixed period given by the `scan_interval`. This leads to excessive processing if the image on the camera hasn't changed, as the default `scan_interval` is 10 seconds. You can override this by adding to your configuration `scan_interval: 10000` (setting the interval to 10,000 seconds) and then call the `image_processing.scan` service when you actually want to perform processing.
 
 ```yaml
 # Example advanced configuration.yaml entry
@@ -140,12 +209,13 @@ image_processing:
 
 ```yaml
 # Example advanced automations.yaml entry
-- alias: Doods scanning
+- alias: "Doods scanning"
   trigger:
      - platform: state
        entity_id:
          - binary_sensor.driveway
   action:
     - service: image_processing.scan
-      entity_id: camera.driveway
+      target:
+        entity_id: image_processing.doods_camera_driveway
 ```

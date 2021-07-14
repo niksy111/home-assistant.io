@@ -1,10 +1,13 @@
 ---
-title: "APNS"
-description: "Instructions on how to add APNS notifications to Home Assistant."
-logo: apple.png
+title: Apple Push Notification Service (APNS)
+description: Instructions on how to add APNS notifications to Home Assistant.
 ha_category:
   - Notifications
 ha_release: 0.31
+ha_iot_class: Cloud Push
+ha_domain: apns
+ha_platforms:
+  - notify
 ---
 
 The `apns` platform uses the Apple Push Notification service (APNS) to deliver notifications from Home Assistant.
@@ -28,7 +31,7 @@ notify:
 
 {% configuration %}
 name:
-  description: he name of the notifier. The notifier will bind to the service `notify.NOTIFIER_NAME`.
+  description: The name of the notifier. The notifier will bind to the service `notify.NOTIFIER_NAME`.
   required: true
   type: string
 cert_file:
@@ -46,9 +49,9 @@ sandbox:
   type: boolean
 {% endconfiguration %}
 
-The APNS platform will register two services, `notify.NOTIFIER_NAME` and `notify.apns_NOTIFIER_NAME`.
+The APNS platform will register two services, `notify.NOTIFIER_NAME` and `apns.apns_NOTIFIER_NAME`.
 
-### notify.apns_NOTIFIER_NAME
+### apns.apns_NOTIFIER_NAME
 
 This service will register device IDs with Home Assistant. In order to receive a notification a device must be registered. The app on the device can use this service to send an ID to Home Assistant during startup, the ID will be stored in `[NOTIFIER_NAME]_apns.yaml`.
 
